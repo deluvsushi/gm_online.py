@@ -1,7 +1,7 @@
 import requests
 
 class GMOnline:
-	def __init__(self, title_id: str = "F80C"):
+	def __init__(self) -> None:
 		self.api = "https://f80c.playfabapi.com/Client"
 		self.headers = {
 			"user-agent": "Dalvik/2.1.0 (Linux; U; Android 7.1.2; SM-G9880 Build/RP1A.2007201.012)",
@@ -10,10 +10,13 @@ class GMOnline:
 			"content-type": "application/json"
 		}
 		self.user_id = None
-		self.title_id = title_id
+		self.title_id = "F80C"
 		self.session_ticket = None
 		
-	def login(self, username: str, password: str):
+	def login(
+			self,
+			username: str,
+			password: str) -> dict:
 		data = {
 			"Password": password,
 			"TitleId": self.title_id,
@@ -33,7 +36,7 @@ class GMOnline:
 			self,
 			username: str,
 			password: str, 
-			email: str):
+			email: str) -> dict:
 		data = {
 			"DisplayName": username,
 			"Email": email,
@@ -46,14 +49,16 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def get_account_info(self, username: str = None):
-		data = {"TitleDisplayName": username}
+	def get_account_info(self, username: str = None) -> dict:
+		data = {
+			"TitleDisplayName": username
+		}
 		return requests.post(
 			f"{self.api}/GetAccountInfo",
 			json=data,
 			headers=self.headers).json()
 
-	def get_inventory(self):		
+	def get_inventory(self) -> dict:		
 		return requests.post(
 			f"{self.api}/GetUserInventory",
 			headers=self.headers).json()
@@ -61,7 +66,7 @@ class GMOnline:
 	def get_store_items(
 			self,
 			catalog_version: str = None,
-			store_id: str = "Main Shop"):
+			store_id: str = "Main Shop") -> dict:
 		data = {
 			"CatalogVersion": catalog_version,
 			"StoreId": store_id
@@ -71,7 +76,7 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def finish_video(self):
+	def finish_video(self) -> dict:
 		data = {
 			"FunctionName": "FinishVideo",
 			"FunctionParameter": {
@@ -83,8 +88,10 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def update_username(self, username: str):
-		data = {"DisplayName": username}
+	def update_username(self, username: str) -> dict:
+		data = {
+			"DisplayName": username
+		}
 		return requests.post(
 			f"{self.api}/UpdateUserTitleDisplayName",
 			json=data,
@@ -99,7 +106,7 @@ class GMOnline:
 			show_created: bool = True,
 			show_last_login: bool = True,
 			show_avatar_url: bool = True,
-			show_banned_until: bool = True):
+			show_banned_until: bool = True) -> dict:
 		data = {
 			"IncludeFacebookFriends": include_facebook_friends,
 			"IncludeSteamFriends": include_steam_friends,
@@ -117,7 +124,7 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 	
-	def send_friend_request(self, user_id: str, tag: str = "requested"):
+	def send_friend_request(self, user_id: str, tag: str = "requested") -> dict:
 		data = {
 			"FunctionName": "SetFriendStatus",
 			"FunctionParameter": {
@@ -131,7 +138,7 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def cancel_friend_request(self, user_id: str):
+	def cancel_friend_request(self, user_id: str) -> dict:
 		data = {
 			"FunctionName": "RemoveFriend",
 			"FunctionParameter": {
@@ -157,7 +164,7 @@ class GMOnline:
 			show_last_login: bool = True,
 			show_avatar_url: bool = True,
 			show_banned_until: bool = True,
-			title_data_keys: list = ["ConsumedDeals", "Referrals"]):
+			title_data_keys: list = ["ConsumedDeals", "Referrals"]) -> dict:
 		data = {
 			"FunctionName": "GetPlayerProfile",
 			"FunctionParameter": {
@@ -194,7 +201,7 @@ class GMOnline:
 			virtual_currency: str,
 			catalog_version: str = None,
 			character_id: str = None,
-			store_id: str = "Main Shop"):
+			store_id: str = "Main Shop") -> dict:
 		data = {
 			"CatalogVersion": catalog_version,
 			"CharacterId": character_id,
@@ -213,7 +220,7 @@ class GMOnline:
 			item_instance_id: str,
 			catalog_version: str = None,
 			character_id: str = None,
-			key_item_instance_id: str = None):
+			key_item_instance_id: str = None) -> dict:
 		data = {
 			"CatalogVersion": catalog_version,
 			"CharacterId": character_id,
@@ -225,7 +232,10 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def finish_game(self, game: str, status: str):
+	def finish_game(
+			self,
+			game: str, 
+			status: str) -> dict:
 		data = {
 			"FunctionName": "FinishGame",
 			"FunctionParameter": {
@@ -238,7 +248,7 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def add_played_time(self, game: str):
+	def add_played_time(self, game: str) -> dict:
 		data = {
 			"FunctionName": "AddPlayedTime",
 			"FunctionParameter": {
@@ -250,14 +260,14 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 
-	def update_avatar_url(self, image_url: str):
+	def update_avatar_url(self, image_url: str) -> dict:
 		data = {"ImageUrl": image_url}
 		return requests.post(
 			f"{self.api}/UpdateAvatarUrl",
 			json=data,
 			headers=self.headers).json()
 
-	def send_account_recovery_mail(self, email: str):
+	def send_account_recovery_mail(self, email: str) -> dict:
 		data = {
 			"Email": email,
 			"TitleId": self.title_id
@@ -267,7 +277,7 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 	
-	def craft_items(self, items: list, bundle: list = ["0000"]):
+	def craft_items(self, items: list, bundle: list = ["0000"]) -> dict:
 		data = {
 			"FunctionName": "craftItems",
 			"FunctionParameter": {
@@ -280,15 +290,21 @@ class GMOnline:
 			json=data,
 			headers=self.headers).json()
 	
-	def get_catalog_items(self, catalog_version: str = "Main"):
-		data = {"Catalog Version": catalog_version}
+	def get_catalog_items(
+			self,
+			catalog_version: str = "Main") -> dict:
+		data = {
+			"Catalog Version": catalog_version
+		}
 		return requests.post(
 			f"{self.api}/GetCatalogItems",
 			json=data,
 			headers=self.headers).json()
 		
-	def update_email(self, email: str):
-		data = {"EmailAddress": email}
+	def update_email(self, email: str) -> dict:
+		data = {
+			"EmailAddress": email
+		}
 		return requests.post(
 			f"{self.api}/AddOrUpdateContactEmail",
 			json=data,
